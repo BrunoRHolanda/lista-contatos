@@ -75,4 +75,11 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install nodejs -y
 
 #Instalar laravel
- composer global require laravel/installer
+sudo apt install php7.3-zip -y
+sudo apt install php7.3-mbstring -y
+sudo apt install php7.3-bcmath -y
+sudo apt install php7.3-xml -y
+
+composer global require laravel/installer
+
+export PATH=$PATH:$HOME/.config/composer/vendor/bin
