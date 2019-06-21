@@ -1,5 +1,3 @@
-const mix = require('laravel-mix');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -10,6 +8,17 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+const mix = require('laravel-mix');
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix.webpackConfig({
+    resolve: {
+        extensions: ['.js', '.vue'],
+        alias: {
+            '@': __dirname + '/resources/assets',
+            '@vue': __dirname + '/resources/assets/vue/src',
+        }
+    },
+});
+
+// noinspection JSUnresolvedFunction
+mix.js('resources/assets/vue/main.js', 'public/js');
