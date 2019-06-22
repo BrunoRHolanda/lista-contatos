@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 interface IRepository
 {
-    public function save(Model $eloquent);
+    public function save(Model &$eloquent);
     public function find(int $id);
     public function findAll();
     public function fetchAll(Builder $builder);

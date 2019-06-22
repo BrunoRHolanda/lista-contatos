@@ -35,7 +35,16 @@ Route::group([
 ], function () {
 
     Route::apiResources([
+
         'users' => 'Api\V1\UserController',
+
     ]);
 
+    Route::get('login',
+
+        function () {
+            return response()->json(['error' => 'Usuário não autenticado', 401]);
+        }
+
+    )->name('login');
 });
