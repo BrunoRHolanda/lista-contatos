@@ -26,3 +26,16 @@ Route::group([
     Route::post('me', 'AuthController@me');
 
 });
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'v1'
+
+], function () {
+
+    Route::apiResources([
+        'users' => 'Api\V1\UserController',
+    ]);
+
+});
