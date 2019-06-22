@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Contact
@@ -11,10 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  * @property int $telephone
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int $user_id
- * @property-read \App\User $user
+ * @property-read User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact query()
@@ -25,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereTelephone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereUserId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Contact extends Model
 {
