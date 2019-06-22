@@ -24,7 +24,7 @@ class JWTTokenTest extends TestCase
         // tenta fazer o login
         $response = $this->post('/api/auth/login', [
             'email' => $user->email,
-            'password' => $user->password
+            'password' => '123456'
         ]);
 
         $response->assertJsonStructure([
