@@ -87,4 +87,23 @@ class ContactRepository extends Repository
 
         return null;
     }
+
+    /**
+     * cria um novo contato no banco de dados.
+     *
+     * @param $user
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function createByUser($user, $params)
+    {
+        $contact = parent::create($params);
+
+        $contact->user()->associate($user);
+
+        $contact->save();
+
+        return $contact;
+    }
 }
