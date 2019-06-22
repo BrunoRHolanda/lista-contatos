@@ -44,10 +44,13 @@ class Repository implements IRepository
      *
      * @param Model $eloquent
      *
+     * @return Model
      */
     public function save(Model $eloquent)
     {
         $eloquent->save();
+
+        return $eloquent;
     }
 
     /**
