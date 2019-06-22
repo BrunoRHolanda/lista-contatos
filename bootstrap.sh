@@ -87,3 +87,7 @@ composer global require laravel/installer
 export PATH=$PATH:$HOME/.config/composer/vendor/bin
 
 composer install
+
+# Após a instalação rodar fora do vagrant
+# npm install
+# npm run watch
