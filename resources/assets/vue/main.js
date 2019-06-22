@@ -6,6 +6,7 @@
 import Vue from 'vue';
 
 import './config/bootstrap';
+import './config/plugins';
 import './config/http';
 
 import Routes from '@vue/router';
