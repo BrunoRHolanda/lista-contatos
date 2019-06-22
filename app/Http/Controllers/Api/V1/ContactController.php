@@ -52,7 +52,10 @@ class ContactController extends Controller
      */
     public function store(ContactRequest $request)
     {
-        $contact = $this->contactRepository->create($request->only('name', 'email', 'telephone'));
+        $contact = $this->contactRepository->createByUser(
+            auth()->user(),
+            $request->only('name', 'email', 'telephone')
+        );
 
         return response()->json($contact, 201);
     }
