@@ -78,7 +78,7 @@ class UserResourceTest extends TestCase
             'password' => $user->password,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     /**
