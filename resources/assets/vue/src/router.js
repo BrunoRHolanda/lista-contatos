@@ -1,17 +1,14 @@
-import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Home from '@vue/views/Home';
-
-Vue.use(VueRouter);
+import Contatos from '@vue/views/Contatos';
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: Home,
+            name: 'contatos',
+            component: Contatos,
         },
     ],
 });
