@@ -91,3 +91,13 @@ composer install
 # Após a instalação rodar fora do vagrant
 # npm install
 # npm run watch
+# Entar no vagrant e configurar banco de dados
+# vagrant ssh
+# mysql -u root -p
+# senha: root
+# GRANT ALL PRIVILEGES ON *.* TO 'contatos_user'@'%' IDENTIFIED BY '123456';
+# \q
+# mysql -u contatos_user -p
+# CREATE DATABASE contatos_db;
+# \q
+# exit
