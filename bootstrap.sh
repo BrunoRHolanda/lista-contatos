@@ -101,4 +101,7 @@ composer install
 # mysql -u contatos_user -p
 # CREATE DATABASE contatos_db;
 # \q
+# cd /vagrant
+# php artisan migrate
+# [OPCIONAL] php artisan db:seed
 # exit
