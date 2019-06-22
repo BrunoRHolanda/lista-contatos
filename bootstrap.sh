@@ -3,8 +3,17 @@
 sudo apt-get install python-software-properties -y
 sudo LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php -y
 sudo apt-get update
-sudo apt-get install php7.3 php7.3-fpm php7.3-mysql php7.3-mcrypt php7.3-mbstring php7.3-xml php7.3-curl php7.3-zip -y
-sudo apt-get --purge autoremove -y
+sudo apt install php7.3 -y
+sudo apt install php7.3-mcrypt -y
+sudo apt install php7.3-fpm -y
+sudo apt install php7.3-zip -y
+sudo apt install php7.3-mbstring -y
+sudo apt install php7.3-bcmath -y
+sudo apt install php7.3-xml -y
+sudo apt install php7.3-curl -y
+sudo apt install libpng-dev -y
+sudo apt install php7.3-mysql -y
+
 sudo service php7.3-fpm restart
 
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
@@ -46,8 +55,8 @@ sudo sed -i "$LINE"'s/.*/error_reporting = E_ALL/' /etc/php/7.3/apache2/php.ini
 LINE=`grep -n 'display_errors = Off' /etc/php/7.3/apache2/php.ini | cut -d ':' -f 1`
 sudo sed -i "$LINE"'s/.*/display_errors = On/' /etc/php/7.3/apache2/php.ini
 
-LINE=`grep -n 'bind-address' /etc/mysql/my.cnf  | cut -d ':' -f 1`
-sudo sed -i "$LINE"'s/.*/# bind-address = 127.0.0.1/' /etc/mysql/my.cnf
+#LINE=`grep -n 'bind-address' /etc/mysql/my.cnf  | cut -d ':' -f 1`
+#sudo sed -i "$LINE"'s/.*/# bind-address = 127.0.0.1/' /etc/mysql/my.cnf
 
 sudo a2enmod rewrite
 
@@ -75,14 +84,6 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install nodejs -y
 
 #Instalar laravel
-sudo apt install php7.3-zip -y
-sudo apt install php7.3-mbstring -y
-sudo apt install php7.3-bcmath -y
-sudo apt install php7.3-xml -y
-sudo apt install php7.3-curl -y
-sudo apt install libpng-dev -y
-sudo apt install php7.3-mysql -y
-
 composer global require laravel/installer
 
 export PATH=$PATH:$HOME/.config/composer/vendor/bin
