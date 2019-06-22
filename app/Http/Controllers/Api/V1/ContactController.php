@@ -88,7 +88,11 @@ class ContactController extends Controller
     {
         $contact = $this->contactRepository->update($id, $request->only('name', 'email', 'telephone'));
 
-        return response()->json($contact);
+        if ($contact) {
+            return response()->json($contact);
+        } else {
+            return response()->json(['error' => 'Contato não encontrado'], 404);
+        }
     }
 
     /**
@@ -106,7 +110,7 @@ class ContactController extends Controller
 
             return response()->json($contact);
         } catch (Exception $e) {
-            return response()->json(['error' => 'não foi possível processar operação!', 500]);
+            return response()->json(['error' => 'não foi possível processar operação!'], 500);
         }
     }
 
