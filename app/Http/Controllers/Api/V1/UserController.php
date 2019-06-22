@@ -7,6 +7,7 @@ use App\Http\Resources\Api\V1\UserCollection;
 use App\Repository\UserRepository;
 use App\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -36,15 +37,23 @@ class UserController extends Controller
      *
      * @param UserRequest $request
      *
-     * @return UserCollection
+     * @return JsonResponse
      */
     public function store(UserRequest $request)
     {
-        $user = User::create($request->only('name', 'email', 'password'));
+        $userRequest = $request->only('name', 'email', 'password');
 
-        $user = $this->userRepository->save($user);
+        $user = new User($userRequest);
 
-        return new UserCollection($user);
+        $user->password = bcrypt($user->password);
+
+        $this->userRepository->save($user);
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
     }
 
     /**
@@ -52,13 +61,17 @@ class UserController extends Controller
      *
      * @param  int  $id
      *
-     * @return UserCollection
+     * @return JsonResponse
      */
     public function show(int $id)
     {
         $user = $this->userRepository->find($id);
 
-        return new UserCollection($user);
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
     }
 
     /**
@@ -68,32 +81,50 @@ class UserController extends Controller
      *
      * @param  int  $id
      *
-     * @return UserCollection
+     * @return JsonResponse
      */
     public function update(UserRequest $request, int $id)
     {
         $user = $this->userRepository->find($id);
 
-        $user->update($request->only('name', 'email', 'password'));
+        if ($user) {
+            $user->name = $request->filled('name')? $request->input('name') : $user->name;
+            $user->email = $request->filled('email')? $request->input('email') : $user->email;
+            $user->password = $request->filled('password')? bcrypt($request->input('password')) : $user->password;
 
-        return new UserCollection($user);
+            $this->userRepository->save($user);
+
+            return response()->json([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        } else {
+            return response()->json(['error' => 'Usuário não encontrado'], 400);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Exclui a própria conta.
      *
      * @param int $id
      *
-     * @return UserCollection
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->userRepository->find(auth()->user()->id);
 
         try {
             $this->userRepository->remove($user);
 
-            return new UserCollection($user);
+            auth()->logout();
+
+            return response()->json([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
         } catch (Exception $e) {
             return response()->json(['error' => 'não foi possível processar operação!', 500]);
         }
