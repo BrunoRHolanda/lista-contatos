@@ -4,12 +4,11 @@ namespace App\Http\Requests\Api\V1;
 
 use App\Http\Requests\Api\V1\Traits\DisplayApiErros;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-
-class UserRequest extends FormRequest
+class ContactRequest extends FormRequest
 {
     use DisplayApiErros;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,17 +26,10 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $request = $this;
-
         return [
-            'name' => 'required|max:100',
-            'email' => [
-                'required',
-                'max:100'
-            ],
-            'password' => [Rule::requiredIf(function () use ($request) {
-                return $request->isMethod('post');
-            })]
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'telephone' => 'required|integer',
         ];
     }
 }

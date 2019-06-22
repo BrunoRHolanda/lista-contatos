@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Api\V1\UserRequest;
-use App\Http\Resources\Api\V1\UserCollection;
 use App\Repository\UserRepository;
-use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -41,19 +38,9 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $userRequest = $request->only('name', 'email', 'password');
+        $user = $this->userRepository->create($request->only('name', 'email', 'password'));
 
-        $user = new User($userRequest);
-
-        $user->password = bcrypt($user->password);
-
-        $this->userRepository->save($user);
-
-        return response()->json([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-        ]);
+        return response()->json($user, 201);
     }
 
     /**
@@ -67,11 +54,7 @@ class UserController extends Controller
     {
         $user = $this->userRepository->find($id);
 
-        return response()->json([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-        ]);
+        return response()->json($user);
     }
 
     /**
@@ -85,46 +68,24 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, int $id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->userRepository->update($id, $request->only('name', 'email', 'password'));
 
-        if ($user) {
-            $user->name = $request->filled('name')? $request->input('name') : $user->name;
-            $user->email = $request->filled('email')? $request->input('email') : $user->email;
-            $user->password = $request->filled('password')? bcrypt($request->input('password')) : $user->password;
-
-            $this->userRepository->save($user);
-
-            return response()->json([
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]);
-        } else {
-            return response()->json(['error' => 'Usuário não encontrado'], 400);
-        }
+        return response()->json($user);
     }
 
     /**
      * Exclui a própria conta.
      *
-     * @param int $id
-     *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy()
     {
-        $user = $this->userRepository->find(auth()->user()->id);
-
         try {
-            $this->userRepository->remove($user);
+            $user = $this->userRepository->remove(auth()->user()->id);
 
             auth()->logout();
 
-            return response()->json([
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]);
+            return response()->json($user);
         } catch (Exception $e) {
             return response()->json(['error' => 'não foi possível processar operação!', 500]);
         }
