@@ -46,7 +46,7 @@ class Repository implements IRepository
      *
      * @return Model
      */
-    public function save(Model $eloquent)
+    public function save(Model &$eloquent)
     {
         $eloquent->save();
 
@@ -58,7 +58,7 @@ class Repository implements IRepository
      *
      * @param int $id
      *
-     * @return Builder|Model|object|null
+     * @return Model|object|null
      *
      */
     public function find(int $id)
