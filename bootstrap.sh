@@ -87,4 +87,3 @@ composer global require laravel/installer
 export PATH=$PATH:$HOME/.config/composer/vendor/bin
 
 composer install
-npm install --no-bin-links
