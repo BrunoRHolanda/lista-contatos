@@ -55,14 +55,13 @@ sudo sed -i "$LINE"'s/.*/error_reporting = E_ALL/' /etc/php/7.3/apache2/php.ini
 LINE=`grep -n 'display_errors = Off' /etc/php/7.3/apache2/php.ini | cut -d ':' -f 1`
 sudo sed -i "$LINE"'s/.*/display_errors = On/' /etc/php/7.3/apache2/php.ini
 
-#LINE=`grep -n 'bind-address' /etc/mysql/my.cnf  | cut -d ':' -f 1`
-#sudo sed -i "$LINE"'s/.*/# bind-address = 127.0.0.1/' /etc/mysql/my.cnf
+LINE=`grep -n 'bind-address' /etc/mysql/mysql.conf.d/mysqld.cnf  | cut -d ':' -f 1`
+sudo sed -i "$LINE"'s/.*/# bind-address = 127.0.0.1/' /etc/mysql/mysql.conf.d/mysqld.cnf
 
 sudo a2enmod rewrite
 
 sudo service apache2 restart
 
-sudo service mysql restart
 
 # Configuração para Composer
 sudo dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
