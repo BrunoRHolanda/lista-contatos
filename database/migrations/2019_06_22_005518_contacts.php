@@ -19,7 +19,7 @@ class Contacts extends Migration
             $table->string('email');
             $table->integer('telephone');
             $table->timestamps();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable($value = true);
 
             $table->foreign('user_id')->references('id')->on('users');
         });

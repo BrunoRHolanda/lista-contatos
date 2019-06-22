@@ -5,8 +5,11 @@ namespace App\Repository;
 
 
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Schema;
 
 /**
  * Repositório base para a fácil implementação de um novo repositório
@@ -40,17 +43,46 @@ class Repository implements IRepository
     }
 
     /**
-     * Salva os dados de um determinado modelo
+     * cria um novo modelo no banco de dados.
      *
-     * @param Model $eloquent
+     * @param $params
      *
-     * @return Model
+     * @return mixed
      */
-    public function save(Model &$eloquent)
+    public function create($params)
     {
-        $eloquent->save();
+        /* @var Model $model */
+        $model = new $this->modelClass($params);
 
-        return $eloquent;
+        $model->save();
+
+        return $model;
+    }
+
+    /**
+     * Salva as alterações se o modelo for encontrado.
+     *
+     * @param int $id
+     *
+     * @param $params
+     *
+     * @return Model|object|null
+     */
+    public function update(int $id, $params)
+    {
+        $model = $this->find($id);
+
+        if ($model) {
+            $fields = Schema::getColumnListing($model->getTable());
+
+            foreach ($fields as $field) {
+                $model->{$field} = $params[$field] ?? $model->{$field};
+            }
+
+            $model->save();
+        }
+
+        return $model;
     }
 
     /**
@@ -63,6 +95,7 @@ class Repository implements IRepository
      */
     public function find(int $id)
     {
+        /* @var Model $model */
         $model = new $this->modelClass();
 
         return $this->modelClass::query()->where(
@@ -72,7 +105,7 @@ class Repository implements IRepository
     /**
      * Retorna todos os modelos sem paginação
      *
-     * @return \Illuminate\Database\Eloquent\Collection|Model[]
+     * @return Collection|Model[]
      *
      */
     public function findAll()
@@ -85,7 +118,7 @@ class Repository implements IRepository
      *
      * @param Builder $builder
      *
-     * @return Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Builder[]|Collection
      *
      */
     public function fetchAll(Builder $builder)
@@ -103,20 +136,27 @@ class Repository implements IRepository
      */
     public function fetch(Builder $builder)
     {
-       return $builder->first();
+        return $builder->first();
     }
 
     /**
      * Remove o modelo informado.
      *
-     * @param Model $eloquent
+     * @param int $id
+     *
+     * @return Model|object|null
      *
      * @throws Exception
-     *
      */
-    public function remove(Model $eloquent)
+    public function remove(int $id)
     {
-        $eloquent->delete();
+        $model = $this->find($id);
+
+        if ($model) {
+            $model->delete();
+        }
+
+        return $model;
     }
 
     /**
@@ -126,7 +166,7 @@ class Repository implements IRepository
      *
      * @param int $perPage
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      *
      */
     public function paginate(Builder $builder, int $perPage)

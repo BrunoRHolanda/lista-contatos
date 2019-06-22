@@ -2,22 +2,30 @@
 
 namespace Tests\Feature;
 
+use App\Contact;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UserResourceTest extends TestCase
+class ContactResourceTest extends TestCase
 {
-
     /**
      * Testa o acesso a rota protegida do index
      *
      * @return void
      */
-    public function testIndexNotAuthenticated()
+    public function testNotAuthenticated()
     {
-        $response = $this->get('/api/v1/users');
+        $response = $this->get('/api/v1/contacts');
+
+        $response->assertStatus(302);
+
+        $response = $this->get('/api/v1/contacts/1');
+
+        $response->assertStatus(302);
+
+        $response = $this->get('/api/v1/contacts/search/asdad');
 
         $response->assertStatus(302);
     }
@@ -33,6 +41,12 @@ class UserResourceTest extends TestCase
         $user = factory(User::class)->create([
             'password' => bcrypt('123456'),
         ]);
+
+        // cria um contato
+        $contact = factory(Contact::class)->make();
+
+        // salva um contato para o usuário
+        $user->contacts()->save($contact);
 
         // tenta fazer o login
         $response = $this->post('/api/auth/login', [
@@ -53,36 +67,57 @@ class UserResourceTest extends TestCase
         // tenta acessar a rota
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get('/api/v1/users');
+        ])->get('/api/v1/contacts');
 
         //verifica se o método foi acessado
-        $response->assertStatus(501);
+        $response->assertStatus(200);
     }
 
     /**
-     * Tenta salvar um usuário
+     * Tenta salvar um contato
      *
      * @return void
      */
-    public function testStoreNotAuthenticated()
+    public function testStoreAuthenticated()
     {
         // cria um usuário
-        $user = factory(User::class)->make([
-            'password' => '123456',
+        $user = factory(User::class)->create([
+            'password' => bcrypt('123456'),
         ]);
 
-        // tenta salvar o mesmo
-        $response = $this->post('/api/v1/users', [
-            'name' => $user->name,
+        // tenta fazer o login
+        $response = $this->post('/api/auth/login', [
             'email' => $user->email,
-            'password' => $user->password,
+            'password' => '123456'
+        ]);
+
+        // verifica se foi gerado o token
+        $response->assertJsonStructure([
+            'access_token',
+            'token_type',
+            'expires_in'
+        ]);
+
+        // pega token de resposta
+        $token = $response->json('access_token');
+
+        // cria um contato
+        $contact = factory(Contact::class)->make();
+
+        // tenta salvar o um contato
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->post('/api/v1/contacts', [
+            'name' => $contact->name,
+            'email' => $contact->email,
+            'telephone' => $contact->telephone,
         ]);
 
         $response->assertStatus(201);
     }
 
     /**
-     * Tenta editar um usuário
+     * Tenta salvar um contato
      *
      * @return void
      */
@@ -93,6 +128,12 @@ class UserResourceTest extends TestCase
             'password' => bcrypt('123456'),
         ]);
 
+        // cria um contato
+        $contact = factory(Contact::class)->make();
+
+        // salva um contato para o usuário
+        $user->contacts()->save($contact);
+
         // tenta fazer o login
         $response = $this->post('/api/auth/login', [
             'email' => $user->email,
@@ -109,62 +150,21 @@ class UserResourceTest extends TestCase
         // pega token de resposta
         $token = $response->json('access_token');
 
-        // tenta modificar o usuário
+        // tenta salvar o um contato
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->put('/api/v1/users/' . $user->id, [
-            'name' => 'Teste Bruno',
-            'email' => $user->email,
-            'password' => '',
+        ])->put('/api/v1/contacts/' . $contact->id, [
+            'id' => $contact->id,
+            'name' => 'Testando contatos',
+            'email' => $contact->email,
+            'telephone' => 123456789,
         ]);
 
-        //verifica se o método foi acessado
         $response->assertStatus(200);
     }
 
     /**
-     * Tenta modificar um usuário inválido
-     *
-     * @return void
-     */
-    public function testEditInvalidAuthenticated()
-    {
-        // cria um usuário
-        $user = factory(User::class)->create([
-            'password' => bcrypt('123456'),
-        ]);
-
-        // tenta fazer o login
-        $response = $this->post('/api/auth/login', [
-            'email' => $user->email,
-            'password' => '123456'
-        ]);
-
-        // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
-        ]);
-
-        // pega token de resposta
-        $token = $response->json('access_token');
-
-        // tenta modificar o usuário
-        $response = $this->withHeaders([
-            'Authorization' => "Bearer $token",
-        ])->put('/api/v1/users/0', [
-            'name' => 'Teste Bruno',
-            'email' => $user->email,
-            'password' => '',
-        ]);
-
-        //verifica se o método foi acessado
-        $response->assertStatus(400);
-    }
-
-    /**
-     * Tenta remover o cadastro do usuário logado.
+     * Tenta salvar um contato
      *
      * @return void
      */
@@ -175,6 +175,12 @@ class UserResourceTest extends TestCase
             'password' => bcrypt('123456'),
         ]);
 
+        // cria um contato
+        $contact = factory(Contact::class)->make();
+
+        // salva um contato para o usuário
+        $user->contacts()->save($contact);
+
         // tenta fazer o login
         $response = $this->post('/api/auth/login', [
             'email' => $user->email,
@@ -191,12 +197,53 @@ class UserResourceTest extends TestCase
         // pega token de resposta
         $token = $response->json('access_token');
 
-        // tenta modificar o usuário
+        // tenta salvar o um contato
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->delete('/api/v1/users/' . $user->id);
+        ])->delete('/api/v1/contacts/' . $contact->id);
 
-        //verifica se o método foi acessado
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Tenta salvar um contato
+     *
+     * @return void
+     */
+    public function testSearchAuthenticated()
+    {
+        // cria um usuário
+        $user = factory(User::class)->create([
+            'password' => bcrypt('123456'),
+        ]);
+
+        // cria 100 contatos
+        $contacts = factory(Contact::class, 100)->make()->each(function ($contact) use ($user) {
+            // salva um contato para o usuário
+            $user->contacts()->save($contact);
+        });
+
+        // tenta fazer o login
+        $response = $this->post('/api/auth/login', [
+            'email' => $user->email,
+            'password' => '123456'
+        ]);
+
+        // verifica se foi gerado o token
+        $response->assertJsonStructure([
+            'access_token',
+            'token_type',
+            'expires_in'
+        ]);
+
+        // pega token de resposta
+        $token = $response->json('access_token');
+
+        // tenta salvar o um contato
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get('/api/v1/contacts/search/a');
+
         $response->assertStatus(200);
     }
 }
