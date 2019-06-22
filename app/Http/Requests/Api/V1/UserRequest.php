@@ -27,14 +27,12 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->filled('id')? $this->input('id') : 0;
         $request = $this;
 
         return [
             'name' => 'required|max:100',
             'email' => [
                 'required',
-                //Rule::unique('users', 'email')->ignore($id),
                 'max:100'
             ],
             'password' => [Rule::requiredIf(function () use ($request) {
