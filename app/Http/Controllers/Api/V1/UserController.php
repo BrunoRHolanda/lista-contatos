@@ -70,7 +70,11 @@ class UserController extends Controller
     {
         $user = $this->userRepository->update($id, $request->only('name', 'email', 'password'));
 
-        return response()->json($user);
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['error' => 'Usuário não encontrado'], 400);
+        }
     }
 
     /**
@@ -87,7 +91,7 @@ class UserController extends Controller
 
             return response()->json($user);
         } catch (Exception $e) {
-            return response()->json(['error' => 'não foi possível processar operação!', 500]);
+            return response()->json(['error' => 'não foi possível processar operação!'], 500);
         }
     }
 }
