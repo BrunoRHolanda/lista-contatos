@@ -1,4 +1,24 @@
-
-\.vagrant/*
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
 
 *.log
+\.vagrant/*
+
+package-lock\.json
+composer\.lock
+
+public/js/main\.js
+
+public/mix-manifest\.json
+
+\.idea/

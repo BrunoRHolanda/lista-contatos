@@ -20,9 +20,9 @@ EOM
 
 sudo tee /etc/apache2/sites-enabled/000-default.conf <<- EOM
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost
-	DocumentRoot /vagrant
-	<Directory "/vagrant">
+	ServerAdmin brunorodriguesholanda@gmail.com
+	DocumentRoot /vagrant/public
+	<Directory "/vagrant/public">
 	    Options Indexes FollowSymLinks
 		AllowOverride All
 		Require all granted
@@ -75,4 +75,19 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install nodejs -y
 
 #Instalar laravel
- composer global require laravel/installer
+sudo apt install php7.3-zip -y
+sudo apt install php7.3-mbstring -y
+sudo apt install php7.3-bcmath -y
+sudo apt install php7.3-xml -y
+sudo apt install php7.3-curl -y
+sudo apt install libpng-dev -y
+
+composer global require laravel/installer
+
+export PATH=$PATH:$HOME/.config/composer/vendor/bin
+
+composer install
+
+# Após a instalação rodar fora do vagrant
+# npm install
+# npm run watch
