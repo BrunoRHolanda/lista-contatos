@@ -1,14 +1,24 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-wf-page="5c93fc19fef8ecc04632209d"
-      data-wf-site="5c93fc19fef8ec2d1132209c">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <meta name="csrf-token" content="{{ csrf_token() }}}">
-    <title>Contatos</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <title>Laravel</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+
+    <link href="{{ asset('css/app.css') }}">
+
 </head>
-<body class="body-2">
+<body>
 <div id="app"></div>
+
 <script src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>

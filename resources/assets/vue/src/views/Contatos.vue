@@ -1,7 +1,5 @@
 <template>
-    <div>
-        Hello, Contacts!
-    </div>
+    <v-container>Hello world</v-container>
 </template>
 
 <script>
