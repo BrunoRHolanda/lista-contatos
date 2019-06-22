@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Http\Requests\Api\V1\Traits\DisplayApiErros;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Http\Request;
+
 
 class UserRequest extends FormRequest
 {
+    use DisplayApiErros;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,10 +27,16 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        /** @var  Request $request */
+        $id = $this->filled('id')? $this->input('id') : 0;
+        $request = $this;
+
         return [
             'name' => 'required|max:100',
-            'email' => 'required|unique:users|max:100',
+            'email' => [
+                'required',
+                //Rule::unique('users', 'email')->ignore($id),
+                'max:100'
+            ],
             'password' => [Rule::requiredIf(function () use ($request) {
                 return $request->isMethod('post');
             })]
