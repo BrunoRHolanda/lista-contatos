@@ -81,6 +81,7 @@ sudo apt install php7.3-bcmath -y
 sudo apt install php7.3-xml -y
 sudo apt install php7.3-curl -y
 sudo apt install libpng-dev -y
+sudo apt install php7.3-mysql -y
 
 composer global require laravel/installer
 
@@ -100,4 +101,7 @@ composer install
 # mysql -u contatos_user -p
 # CREATE DATABASE contatos_db;
 # \q
+# cd /vagrant
+# php artisan migrate
+# [OPCIONAL] php artisan db:seed
 # exit
