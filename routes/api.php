@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +16,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 
-], function ($router) {
+], function () {
 
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
@@ -37,8 +35,11 @@ Route::group([
     Route::apiResources([
 
         'users' => 'Api\V1\UserController',
+        'contacts' => 'Api\V1\ContactsController',
 
     ]);
+
+    Route::get('contacts/search/{text}', 'Api\V1\ContactsController@search');
 
     Route::get('login',
 
