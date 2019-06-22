@@ -35,11 +35,11 @@ Route::group([
     Route::apiResources([
 
         'users' => 'Api\V1\UserController',
-        'contacts' => 'Api\V1\ContactsController',
+        'contacts' => 'Api\V1\ContactController',
 
     ]);
 
-    Route::get('contacts/search/{text}', 'Api\V1\ContactsController@search');
+    Route::get('contacts/search/{text}', 'Api\V1\ContactController@search');
 
     Route::get('login',
 
