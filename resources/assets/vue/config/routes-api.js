@@ -6,4 +6,8 @@ module.exports = {
         me: { url: 'auth/me', method: 'GET'},
         refresh: { url: 'auth/refresh', method: 'GET'},
     },
+    resources: {
+        contacts: 'v1/contacts',
+        users: 'v1/users',
+    }
 };
