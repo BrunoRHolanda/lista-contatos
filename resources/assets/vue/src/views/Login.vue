@@ -58,7 +58,7 @@
                     body: { email: this.email, password: this.password },
                     error: () => alert('Usuário e/ou senha inválidos.'),
                     rememberMe: this.remember,
-                    redirect: '/contatos'
+                    redirect: '/app'
                 });
             }
         },
