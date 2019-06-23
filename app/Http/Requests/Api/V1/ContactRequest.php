@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Http\Requests\Api\V1\Traits\DisplayApiErros;
+
 use Illuminate\Foundation\Http\FormRequest;
+
+use App\Http\Requests\Api\V1\Traits\DisplayApiErros;
 
 class ContactRequest extends FormRequest
 {

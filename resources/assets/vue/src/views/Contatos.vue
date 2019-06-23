@@ -2,12 +2,6 @@
     <v-container>
         <v-card>
             <v-card-title>
-                <v-toolbar-title>Contatos</v-toolbar-title>
-                <v-divider
-                        class="mx-2"
-                        inset
-                        vertical
-                ></v-divider>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -18,7 +12,16 @@
                 ></v-text-field>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on">Novo Contato</v-btn>
+                        <v-btn
+                            fab
+                            dark
+                            absolute
+                            left
+                            color="teal"
+                            v-on="on"
+                        >
+                            <v-icon dark>add</v-icon>
+                        </v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
@@ -29,13 +32,23 @@
                             <v-container grid-list-md>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6 md4>
-                                        <v-text-field v-model="contato.name" label="Nome"></v-text-field>
+                                        <v-text-field
+                                                v-model="contato.name"
+                                                label="Nome"
+                                        ></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6 md4>
-                                        <v-text-field v-model="contato.email" label="Email"></v-text-field>
+                                        <v-text-field
+                                                v-model="contato.email"
+                                                label="Email"
+                                        ></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6 md4>
-                                        <v-text-field v-model="contato.telephone" label="Telefone"></v-text-field>
+                                        <v-text-field
+                                                v-model="contato.telephone"
+                                                label="Telefone"
+                                                mask="(##)# ####-####"
+                                        ></v-text-field>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -89,10 +102,12 @@
 <script>
 
     import ContactsService from "@vue/services/ContactsService";
-    import Contato from "@vue/models/Contato";
+    import Contact from "@vue/models/Contact";
+    import Toolbar from "@vue/components/App/Toolbar";
 
     export default {
         name: "Contatos",
+        components: {Toolbar},
         data() {
             return {
                 contatos: [],
@@ -126,7 +141,7 @@
                 ],
                 search: '',
                 editedIndex: -1,
-                contato: Contato,
+                contato: Contact,
                 dialog: false,
             };
         },
@@ -157,10 +172,12 @@
 
             deleteItem (item) {
                 const index = this.contatos.indexOf(item);
-                confirm('Deseja remover esse contato ?') && ContactsService.delete(this.contatos[index], (response, error) => {
-                    if (error) return;
-                    this.contatos.splice(index, 1);
-                });
+                confirm('Deseja remover esse contato ?') && ContactsService.delete(
+                    this.contatos[index], (response, error) => {
+                        if (error) return;
+                        this.contatos.splice(index, 1);
+                    }
+                );
             },
 
             close () {
@@ -172,7 +189,7 @@
                     ContactsService.update(this.contato, (response, error) => {
                         if (error) return;
                         Object.assign(this.contatos[this.editedIndex], response.body);
-                        this.contato = Object.assign({}, Contato);
+                        this.contato = Object.assign({}, Contact);
                         this.editedIndex = -1
                     });
                 } else {

@@ -2,14 +2,17 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Http\Requests\Api\V1\Traits\DisplayApiErros;
-use Illuminate\Foundation\Http\FormRequest;
+
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
+
+use App\Http\Requests\Api\V1\Traits\DisplayApiErros;
 
 
 class UserRequest extends FormRequest
 {
     use DisplayApiErros;
+
     /**
      * Determine if the user is authorized to make this request.
      *

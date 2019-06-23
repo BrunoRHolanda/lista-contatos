@@ -1,8 +1,8 @@
-const Contato = {
+const Contact = {
     id: null,
     name: '',
     email: '',
     telephone: '',
 };
 
-export default Contato;
+export default Contact;

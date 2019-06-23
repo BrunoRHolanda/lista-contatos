@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\Api\V1\ContactRequest;
-use App\Repository\ContactRepository;
+
 use Exception;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+
+use App\Http\Controllers\Controller;
+use App\Repository\ContactRepository;
+use App\Http\Requests\Api\V1\ContactRequest;
 
 class ContactController extends Controller
 {
