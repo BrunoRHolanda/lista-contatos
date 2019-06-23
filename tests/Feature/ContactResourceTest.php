@@ -55,14 +55,12 @@ class ContactResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta acessar a rota
         $response = $this->withHeaders([
@@ -92,14 +90,12 @@ class ContactResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // cria um contato
         $contact = factory(Contact::class)->make();
@@ -141,14 +137,12 @@ class ContactResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta salvar o um contato
         $response = $this->withHeaders([
@@ -188,14 +182,12 @@ class ContactResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta salvar o um contato
         $response = $this->withHeaders([
@@ -230,14 +222,12 @@ class ContactResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta salvar o um contato
         $response = $this->withHeaders([

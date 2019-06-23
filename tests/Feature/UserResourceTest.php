@@ -41,14 +41,12 @@ class UserResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta acessar a rota
         $response = $this->withHeaders([
@@ -100,14 +98,12 @@ class UserResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta modificar o usuário
         $response = $this->withHeaders([
@@ -141,14 +137,12 @@ class UserResourceTest extends TestCase
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta modificar o usuário
         $response = $this->withHeaders([
@@ -175,21 +169,18 @@ class UserResourceTest extends TestCase
             'password' => bcrypt('123456'),
         ]);
 
-        // tenta fazer o login
         $response = $this->post('/api/auth/login', [
             'email' => $user->email,
             'password' => '123456'
         ]);
 
         // verifica se foi gerado o token
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        $response->assertJson([
+            "status" => "success",
         ]);
 
         // pega token de resposta
-        $token = $response->json('access_token');
+        $token = $response->headers->get('Authorization');
 
         // tenta modificar o usuário
         $response = $this->withHeaders([
