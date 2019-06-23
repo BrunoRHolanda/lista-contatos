@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\Api\V1\UserRequest;
-use App\Repository\UserRepository;
+
 use Exception;
 use Illuminate\Http\JsonResponse;
+
+use App\Repository\UserRepository;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\UserRequest;
 
 class UserController extends Controller
 {
@@ -46,7 +48,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      *
      * @return JsonResponse
      */
@@ -62,7 +64,7 @@ class UserController extends Controller
      *
      * @param UserRequest $request
      *
-     * @param  int  $id
+     * @param int $id
      *
      * @return JsonResponse
      */

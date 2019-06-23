@@ -2,9 +2,10 @@
 
 namespace App;
 
+
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Contact
