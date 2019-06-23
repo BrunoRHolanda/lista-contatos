@@ -2,19 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use JWTAuth;
+use App\Repository\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    private $userRepository;
+
     /**
      * Create a new AuthController instance.
      *
-     * @return void
+     * @param UserRepository $repository
      */
-    public function __construct()
+    public function __construct(UserRepository $repository)
     {
+        $this->userRepository = $repository;
+
         $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
+    public function impersonate(Request $request)
+    {
+        $user = $this->userRepository->find($request->get('id'));
+
+        if ( ! $token = JWTAuth::fromUser($user)) {
+            return response([
+                'status' => 'error',
+                'error' => 'invalid.credentials',
+                'msg' => 'Invalid Credentials.'
+            ], 404);
+        }
+        return response([
+            'status' => 'success'
+        ])->header('Authorization', $token);
     }
 
     /**
@@ -43,9 +65,11 @@ class AuthController extends Controller
      */
     public function me()
     {
+        $user = $this->userRepository->find(auth()->user()->id);
+
         return response([
             'status' => 'success',
-            'data' => auth()->user()
+            'data' => $user
         ]);
     }
 

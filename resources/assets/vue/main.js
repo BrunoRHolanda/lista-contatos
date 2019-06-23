@@ -5,11 +5,11 @@
  */
 import Vue from 'vue';
 
-import './config/bootstrap';
-import './config/plugins';
-import './config/http';
+import '@config/bootstrap';
+import '@config/plugins';
+import '@config/http';
 import '@vue/router';
-import './config/auth';
+import '@config/auth';
 
 import App from '@vue/App';
 

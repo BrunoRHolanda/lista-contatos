@@ -27,10 +27,9 @@ class JWTTokenTest extends TestCase
             'password' => '123456'
         ]);
 
-        $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
+        // verifica se foi gerado o token
+        $response->assertJson([
+            "status" => "success",
         ]);
     }
 }

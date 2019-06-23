@@ -7,7 +7,7 @@
                         <v-card-title primary-title>
                             <h3>Entrar</h3>
                         </v-card-title>
-                        <v-form>
+                        <v-form v-if="!loading">
                             <v-text-field
                                     prepend-icon="person"
                                     name="Username"
@@ -25,6 +25,14 @@
                                 <v-btn primary large block @click="enviar()">Login</v-btn>
                             </v-card-actions>
                         </v-form>
+                        <div class="text-xs-center" v-if="loading">
+                            <v-progress-circular
+                                    :size="70"
+                                    :width="7"
+                                    color="purple"
+                                    indeterminate
+                            ></v-progress-circular>
+                        </div>
                     </v-container>
                 </v-card>
             </v-flex>
@@ -39,14 +47,15 @@
             return {
                 email: '',
                 password: '',
-                remember: false,
+                remember: true,
+                loading: false,
             };
         },
         methods: {
             enviar() {
+                this.loading = true;
                 this.$auth.login({
-                    params: { email: this.email, password: this.password },
-                    success: () => alert('Logado com sucesso!'),
+                    body: { email: this.email, password: this.password },
                     error: () => alert('Usuário e/ou senha inválidos.'),
                     rememberMe: this.remember,
                     redirect: '/contatos'
