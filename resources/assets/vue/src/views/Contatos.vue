@@ -29,13 +29,13 @@
                             <v-container grid-list-md>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6 md4>
-                                        <v-text-field v-model="editedItem.name" label="Nome"></v-text-field>
+                                        <v-text-field v-model="contato.name" label="Nome"></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6 md4>
-                                        <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                                        <v-text-field v-model="contato.email" label="Email"></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6 md4>
-                                        <v-text-field v-model="editedItem.telephone" label="Telefone"></v-text-field>
+                                        <v-text-field v-model="contato.telephone" label="Telefone"></v-text-field>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -89,6 +89,7 @@
 <script>
 
     import ContactsService from "@vue/services/ContactsService";
+    import Contato from "@vue/models/Contato";
 
     export default {
         name: "Contatos",
@@ -125,18 +126,7 @@
                 ],
                 search: '',
                 editedIndex: -1,
-                editedItem: {
-                    id: null,
-                    name: '',
-                    email: '',
-                    telephone: 0,
-                },
-                defaultItem: {
-                    id: null,
-                    name: '',
-                    email: '',
-                    telephone: 0,
-                },
+                contato: Contato,
                 dialog: false,
             };
         },
@@ -155,33 +145,41 @@
         },
         methods: {
             fetchAllContacts(response, error) {
+                if (error) return;
                 this.contatos = response.body;
             },
 
             editItem (item) {
                 this.editedIndex = this.contatos.indexOf(item);
-                this.editedItem = Object.assign({}, item);
+                this.contato = Object.assign({}, item);
                 this.dialog = true
             },
 
             deleteItem (item) {
                 const index = this.contatos.indexOf(item);
-                confirm('Deseja remover esse contato ?') && this.contatos.splice(index, 1)
+                confirm('Deseja remover esse contato ?') && ContactsService.delete(this.contatos[index], (response, error) => {
+                    if (error) return;
+                    this.contatos.splice(index, 1);
+                });
             },
 
             close () {
                 this.dialog = false;
-                setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem);
-                    this.editedIndex = -1
-                }, 300)
             },
 
             save () {
                 if (this.editedIndex > -1) {
-                    Object.assign(this.contatos[this.editedIndex], this.editedItem);
+                    ContactsService.update(this.contato, (response, error) => {
+                        if (error) return;
+                        Object.assign(this.contatos[this.editedIndex], response.body);
+                        this.contato = Object.assign({}, Contato);
+                        this.editedIndex = -1
+                    });
                 } else {
-                    this.contatos.push(this.editedItem);
+                    ContactsService.store(this.contato, (response, error) => {
+                        if (error) return;
+                        this.contatos.push(response.body);
+                    });
                 }
                 this.close();
             }
