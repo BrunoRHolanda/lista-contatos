@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Contact;
-use App\User;
-use Tests\TestCase;
+
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use App\User;
+use App\Contact;
+use Tests\TestCase;
 
 class ContactResourceTest extends TestCase
 {
