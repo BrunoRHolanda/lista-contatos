@@ -1,19 +1,28 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Home from '@vue/views/Home';
+import Contatos from '@vue/views/Contatos';
+import Login from "@vue/views/Login";
 
-Vue.use(VueRouter);
-
-const router = new VueRouter({
+Vue.router = new VueRouter({
     mode: 'history',
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: Home,
+            redirect: '/login'
         },
+        {
+            path: '/contatos',
+            name: 'contatos',
+            component: Contatos,
+            meta: { auth: true },
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login,
+            meta: { auth: false }
+        }
     ],
 });
 
-export default router;

@@ -1,13 +1,11 @@
 <template>
-    <div>
-        Hello, World!
-    </div>
+    <v-container>Hello world</v-container>
 </template>
 
 <script>
 
     export default {
-        name: "Home",
+        name: "Contatos",
         data() {
             return {
 

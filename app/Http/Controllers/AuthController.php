@@ -31,7 +31,9 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return response([
+            'status' => 'success'
+        ])->header('Authorization', $token);
     }
 
     /**
@@ -41,7 +43,10 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response([
+            'status' => 'success',
+            'data' => auth()->user()
+        ]);
     }
 
     /**
@@ -64,7 +69,11 @@ class AuthController extends Controller
     public function refresh()
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        return $this->respondWithToken(auth()->refresh());
+        auth()->refresh();
+
+        return response([
+            'status' => 'success'
+        ]);
     }
 
     /**
