@@ -49,8 +49,6 @@ Vue.use(VueAuth, {
      *
      */
     refreshData: {
-        url: RoutesApi.auth.refresh.url,
-        method: RoutesApi.auth.refresh.method,
-        atInit: false
-    }
+        enabled: false
+    },
 });
