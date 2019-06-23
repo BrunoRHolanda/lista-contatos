@@ -5,16 +5,16 @@
  */
 import Vue from 'vue';
 
-import './config/bootstrap';
-import './config/http';
+import '@config/bootstrap';
+import '@config/plugins';
+import '@config/http';
+import '@vue/router';
+import '@config/auth';
 
-import Routes from '@vue/router';
 import App from '@vue/App';
 
-const app = new Vue({
-    el: '#app',
-    router: Routes,
-    render: h => h(App),
-});
+App.router = Vue.router;
+
+const app = new Vue(App).$mount('#app');
 
 export default app;

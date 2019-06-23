@@ -1,7 +1,5 @@
 import Vue from 'vue';
-import VueResource from 'vue-resource';
 
-Vue.use(VueResource);
+import API from '@config/routes-api';
 
-Vue.http.options.root = '/api';
-// Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk';
+Vue.http.options.root = API.root;

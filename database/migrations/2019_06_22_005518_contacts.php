@@ -17,7 +17,7 @@ class Contacts extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email');
-            $table->integer('telephone');
+            $table->string('telephone');
             $table->timestamps();
             $table->unsignedBigInteger('user_id')->nullable($value = true);
 

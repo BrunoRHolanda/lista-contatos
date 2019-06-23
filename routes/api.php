@@ -19,9 +19,10 @@ Route::group([
 ], function () {
 
     Route::post('login', 'AuthController@login');
+    Route::post('impersonate', 'AuthController@impersonate');
     Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::get('refresh', 'AuthController@refresh');
+    Route::get('me', 'AuthController@me');
 
 });
 

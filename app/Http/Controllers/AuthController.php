@@ -2,19 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
+
+use JWTAuth;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Routing\ResponseFactory;
+
+use App\Repository\UserRepository;
 
 class AuthController extends Controller
 {
+    private $userRepository;
+
     /**
      * Create a new AuthController instance.
      *
-     * @return void
+     * @param UserRepository $repository
      */
-    public function __construct()
+    public function __construct(UserRepository $repository)
     {
+        $this->userRepository = $repository;
+
         $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
+    /**
+     * Verifica autenticidade do usuário logado.
+     *
+     * @param Request $request
+     *
+     * @return ResponseFactory|Response
+     */
+    public function impersonate(Request $request)
+    {
+        $user = $this->userRepository->find($request->get('id'));
+
+        if (!$token = JWTAuth::fromUser($user)) {
+            return response([
+                'status' => 'error',
+                'error' => 'invalid.credentials',
+                'msg' => 'Invalid Credentials.'
+            ], 404);
+        }
+        return response([
+            'status' => 'success'
+        ])->header('Authorization', $token);
     }
 
     /**
@@ -27,11 +60,13 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return response([
+            'status' => 'success'
+        ])->header('Authorization', $token);
     }
 
     /**
@@ -41,7 +76,12 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = $this->userRepository->find(auth()->user()->id);
+
+        return response([
+            'status' => 'success',
+            'data' => $user
+        ]);
     }
 
     /**
@@ -64,13 +104,17 @@ class AuthController extends Controller
     public function refresh()
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        return $this->respondWithToken(auth()->refresh());
+        auth()->refresh();
+
+        return response([
+            'status' => 'success'
+        ]);
     }
 
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return JsonResponse
      */

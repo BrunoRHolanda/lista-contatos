@@ -1,21 +1,15 @@
 <template>
     <div>
-        Hello, World!
+        <toolbar></toolbar>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-
+    import Toolbar from "@vue/components/App/Toolbar";
     export default {
         name: "Home",
-        data() {
-            return {
-
-            };
-        },
-        created() {},
-        computed: {},
-        methods: {},
+        components: {Toolbar}
     }
 </script>
 

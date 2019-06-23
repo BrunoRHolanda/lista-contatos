@@ -16,6 +16,7 @@ mix.webpackConfig({
         alias: {
             '@': __dirname + '/resources/assets',
             '@vue': __dirname + '/resources/assets/vue/src',
+            '@config': __dirname + '/resources/assets/vue/config',
         }
     },
 });
